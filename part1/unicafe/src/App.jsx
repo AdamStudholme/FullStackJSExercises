@@ -11,12 +11,8 @@ const StatsLine = ({text, stat}) => <tr><td>{text}:</td><td>{stat}</td></tr>;
 const Stats = (props) => {
   console.log(props);
   const positivePercentage = (Math.round((((props.good/props.all)*100)+ Number.EPSILON)*100)/100 + ' %');
-  let average; 
+  const average = (props.good - props.bad)/props.all || 0; // || means that if there are no votes instead of NaN average will get 0 assigned.
   
-  //Prevent a divide by zero error.
-  props.all === 0 ? average = 0 : average = (props.good - props.bad)/props.all;
-  console.log(average);
-
   //Round average score to 3 decimal places
   average = Math.round((average + Number.EPSILON)*1000)/1000;
 
