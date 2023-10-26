@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-const Header = ({text}) => <h1>{text}</h1>
+const Header = ({text}) => <h1>{text}</h1>;
 
-const Button = ({clickHandler, text}) => <button style={{marginRight: 10}} onClick={clickHandler}>{text}</button>
+const Button = ({clickHandler, text}) => <button style={{marginRight: 10}} onClick={clickHandler}>{text}</button>;
 
 const Anecdote = ({anecdote, votes}) => {
   return (
@@ -10,7 +10,7 @@ const Anecdote = ({anecdote, votes}) => {
       <p>{anecdote}</p>
       <p>Number of votes: {votes}</p>
     </> )
-}
+};
 
 
 const App = () => {
@@ -26,26 +26,26 @@ const App = () => {
   ]
   
   //Set useState to an array of zeros of length anecdotes. This will store store to corrisponding votes
-  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
-  const [selected, setSelected] = useState(0)
-  const [highestVoted, setHighestVoted] =useState(0) // To store index of highest voted anecdote
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
+  const [selected, setSelected] = useState(0);
+  const [highestVoted, setHighestVoted] =useState(0); // To store index of highest voted anecdote
   
   //Generates a random number between 0 and length of anecdotes - 1, which will enable selection of anecdotee
   const nextClickHandler = () => {
-    setSelected(Math.floor(Math.random()* anecdotes.length))
-  }
+    setSelected(Math.floor(Math.random()* anecdotes.length));
+  };
 
   const voteClickHandler =() =>{
-    const newVotes =[...votes] // Makes copy of votes and mutates the copy. This is then passed into the setter function
-    newVotes[selected] += 1 // add one to the current anecdotes vote count
+    const newVotes =[...votes]; // Makes copy of votes and mutates the copy. This is then passed into the setter function
+    newVotes[selected] += 1; // add one to the current anecdotes vote count
 
   // Checks if vote count for current anecdote is higher than current top voted
   // If it is it changes the saved index for top voted
     if(newVotes[selected] > votes[highestVoted]){
-      setHighestVoted(selected)}
+      setHighestVoted(selected)};
     
-    setVotes(newVotes)
-  }
+    setVotes(newVotes);
+  };
 
   return (
     <div>
@@ -57,7 +57,7 @@ const App = () => {
       <Anecdote anecdote={anecdotes[highestVoted]} votes={votes[highestVoted]}/> 
     </div>
   )
-}
+};
 
 export default App
 

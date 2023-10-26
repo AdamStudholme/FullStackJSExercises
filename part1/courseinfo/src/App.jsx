@@ -3,13 +3,13 @@ const Header = ({course}) => <h1>{course}</h1>
 
 //Part Component
 const Part = props => {
-  console.log(props)
+  console.log(props);
   return(
     <p>
       {props.part} {props.exercise}
     </p> 
   )
-}
+};
 
 // Content Component, comprising of several Parts
 const Content = ({parts}) => {
@@ -20,16 +20,16 @@ const Content = ({parts}) => {
       <Part part={parts[2].name} exercise={parts[2].exercises}/>
      </>
    )
-}
+};
 
 // To run console.log props must be used in the Component definition. It cannot be destructured like above components
 const Total = props => {
-  console.log(props)
+  console.log(props);
     return(
       <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} </p>
     
     )
- }
+ };
 
 
 const App = () => {
@@ -50,7 +50,7 @@ const App = () => {
         exercises: 14
       }
     ]
-  }
+  };
 
   return(
     <div>
@@ -59,6 +59,6 @@ const App = () => {
       <Total parts={course.parts}/>
     </div>
   )
-}
+};
 
 export default App
