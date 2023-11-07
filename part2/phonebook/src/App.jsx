@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Contacts from './components/Contacts';
-import Form from './components/Form';
+import PersonForm from './components/PersonForm';
+import Filter from './components/Filter';
+
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -14,16 +16,19 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [newFilter, setFilter] = useState('Enter name here');
 
- 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);       
-  }  
-
   const clearDefault = (event) => {
     event.preventDefault()
     if(newFilter === 'Enter name here') setFilter("");
   }
-  /* --- Removed and put in Form Component
+
+  let filterRegex = new RegExp(newFilter, "i");
+  let visiblePersons = (newFilter === 'Enter name here' || newFilter.trim() === "") 
+    ? persons 
+    : persons.filter(({name}) => name.match(filterRegex));
+  
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);       
+  }  
    const  handleNameChange = (event) =>{
     setNewName(event.target.value);
   }
@@ -31,7 +36,7 @@ const App = () => {
     setNewNumber(event.target.value);
   }
 
-  const saveDetails = (event) => {
+  const handleSaveDetails = (event) => {
     event.preventDefault()
     if(persons.map(person => person.name).includes(newName)) 
       return alert(`${newName} is already in the phone book`);
@@ -43,38 +48,15 @@ const App = () => {
     setPersons(persons.concat(personObj));
     setNewName("");
     setNewNumber("");
-  }
-  */
-  let filterRegex = new RegExp(newFilter, "i");
-  let visiblePersons = (newFilter === 'Enter name here' || newFilter.trim() === "") 
-    ? persons 
-    : persons.filter(({name}) => name.match(filterRegex));
+  }  
+  
   
   return (
     <div>
       <h2>Phonebook</h2>
-        <div>
-          Filter by: <input value={newFilter} onClick={clearDefault} onChange={handleFilterChange} />
-        </div>        
+        <Filter newFilter={newFilter} filterChangeHandler={handleFilterChange} clearDefaultHandler={clearDefault}/>
       <h2>Add New Contact</h2>
-        <Form 
-          setNewName={setNewName} 
-          setNewNumber={setNewNumber} 
-          newName={newName} 
-          newNumber={newNumber} 
-          persons={persons} 
-          setPersons={setPersons}/>
-        {/* <form> --- Put in form component
-          <div>
-            Name: <input value={newName} onChange={handleNameChange} />
-          </div>
-          <div>
-            Number: <input value={newNumber} onChange={handleNumberChange} />
-          </div>
-          <div>
-            <button type="submit" onClick={saveDetails} >add</button>
-          </div>
-        </form> */}
+       <PersonForm newName={newName} newNumber={newNumber} nameChangeHandler={handleNameChange} numberChangeHandler={handleNumberChange} saveDetailsHandler={handleSaveDetails}/>
       <h2>Numbers</h2>
         <Contacts persons={visiblePersons}/>
   </div>
