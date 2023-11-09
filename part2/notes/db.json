@@ -1,19 +1,19 @@
 {
   "notes": [
     {
-      "id": 1,
       "content": "HTML is easy",
-      "important": true
+      "important": true,
+      "id": 1
     },
     {
-      "id": 2,
       "content": "Browser can execute only JavaScript",
-      "important": true
+      "important": false,
+      "id": 2
     },
     {
-      "id": 3,
       "content": "GET and POST are the most important methods of HTTP protocol",
-      "important": true
+      "important": true,
+      "id": 3
     },
     {
       "content": "hi",
@@ -27,8 +27,28 @@
     },
     {
       "content": "Learn to delete notes",
-      "important": false,
+      "important": true,
       "id": 6
+    },
+    {
+      "content": "Hi",
+      "important": true,
+      "id": 7
+    },
+    {
+      "content": "HI",
+      "important": true,
+      "id": 8
+    },
+    {
+      "content": "New note being added",
+      "important": false,
+      "id": 9
+    },
+    {
+      "content": "Lets add a note",
+      "important": false,
+      "id": 10
     }
   ]
 }

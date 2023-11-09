@@ -2,7 +2,6 @@ import Note from "./components/Note"
 import { useState, useEffect } from "react"
 import noteService from './services/notes'
 
-
 // const promise2 = axios.get('http://localhost:3001/foobar') // Comes back with rejected as web address doesn't exist.
 // console.log(promise2)
 
@@ -11,11 +10,9 @@ const App = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [showAll, setShowAll] = useState(true);
+  console.log(notes);
 
-  const handleNoteChange = (event) => { // Handles any changes to the input field updating the newNote state
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-  };
+
   /*
    // To make the useEffect() clearer seperate the effect function
  
@@ -36,12 +33,12 @@ const App = () => {
 
   //-- Above can be simplified to
   useEffect(() => {
-    noteService // Now the erver methods are imported from the services module
+    noteService // Now the server methods are imported from the services module
       .getAll()
-      .then(response => {
-        setNotes(response.data)
-        console.log(notes);
+      .then(initialNotes => {
+        setNotes(initialNotes)
       })
+    //---------------- Long hand of above
     // console.log('effect');
     // axios
     // .get('http://localhost:3001/notes')
@@ -50,10 +47,6 @@ const App = () => {
     //   setNotes(response.data);          
     // }) 
   }, [])
-
-  const notesToShow = showAll
-    ? notes // If true show all notes
-    : notes.filter(note => note.important); //If false only show important notes
 
   const addNote = (event) => {
     event.preventDefault() // Prevents default action for a button click on submit. Prevents page reload among other things
@@ -66,32 +59,52 @@ const App = () => {
 
     noteService
       .create(noteObject)
-      .then(response => {
-        setNotes(notes.concat(response.data))
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
         setNewNote('')
       })
+
+    //---------------- Long hand of above
     // axios
     //   .post('http://localhost:3001/notes', noteObject)
     //   .then(response =>{
     //     console.log(response);
     //     setNotes(notes.concat(response.data)); // Add note to the notes
     //     setNewNote(''); // Set new note back to empty string        
+    // })
   }
 
-
-
   const toggleImportanceOf = (id) => {
+    //const url = `http://localhost:3001/notes/${id}`
     const note = notes.find(n => n.id === id); // Find the note with the matching id
     const changedNote = { ...note, important: !note.important } // This object spread syntax allows you create a copy and just edit the one property 
     //of the note object without having to type it all out
 
     noteService
       .update(id, changedNote)
-      .then(response => {
-        setNotes(notes.map(n => n.id !== id ? n : response.data)) // Map changed data to displayed notes
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
+      .catch(error => {
+        setNotes(notes.filter(n => n.id !== id))
+        alert(`${error}: This note '${note.content}' was already deleted from the server`)
+      })
+    //---------------- Long hand of above 
+    // axios.put(url, changedNote)
+    //   .then(response => {
+    //     setNotes(notes.map(n => n.id !== id ? n : response.data)) // Map changed data to displayed notes
+    //   })
   }
 
+  const notesToShow = showAll
+    ? notes // If true show all notes
+    : notes.filter(note => note.important); //If false only show important notes
+
+
+  const handleNoteChange = (event) => { // Handles any changes to the input field updating the newNote state
+    console.log(event.target.value)
+    setNewNote(event.target.value)
+  };
 
   return (
     <div>
