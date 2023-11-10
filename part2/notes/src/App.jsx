@@ -1,15 +1,31 @@
 import Note from "./components/Note"
+import Notification from "./components/Notification"
 import { useState, useEffect } from "react"
 import noteService from './services/notes'
 
 // const promise2 = axios.get('http://localhost:3001/foobar') // Comes back with rejected as web address doesn't exist.
 // console.log(promise2)
+const Footer = () => {
+  const footerStyle = {
+      color: 'green',
+      fontStyle: 'italic',
+      fontSize: 16
+  }
+
+  return(
+      <div style={footerStyle}>
+          <br/>
+          <em>Note app, Department of Computer Science, University of Beechgrove 2023</em>
+      </div>
+  )
+}
 
 const App = () => {
 
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(null); //Set to null rather than empty array
   const [newNote, setNewNote] = useState('');
   const [showAll, setShowAll] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null)
   console.log(notes);
 
 
@@ -48,6 +64,12 @@ const App = () => {
     // }) 
   }, [])
 
+  // Handles map issues of the Note component on a null value on first render. Once the first render 
+  //is complete the useEffect is triggered and notes are fetched and then can be rendered.
+  if (!notes){ 
+    return null
+  }
+
   const addNote = (event) => {
     event.preventDefault() // Prevents default action for a button click on submit. Prevents page reload among other things
     //console.log('button clicked', event.target) // the event.target stores the target of the event, in this case the form.
@@ -85,9 +107,11 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
-      .catch(error => {
+      .catch( error => {
+        setErrorMessage(`This note '${note.content}' was already deleted from the server`)
+        setTimeout(() => {
+          setErrorMessage(null)}, 5000)
         setNotes(notes.filter(n => n.id !== id))
-        alert(`${error}: This note '${note.content}' was already deleted from the server`)
       })
     //---------------- Long hand of above 
     // axios.put(url, changedNote)
@@ -109,6 +133,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -126,6 +151,7 @@ const App = () => {
         />
         <button type='submit'>Save</button>
       </form>
+      <Footer/>
     </div>
   );
 }
